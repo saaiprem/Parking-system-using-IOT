@@ -1,0 +1,93 @@
+#include <LiquidCrystal.h>
+#include <NewPing.h>
+#include <Servo.h>
+
+LiquidCrystal lcd(0,1,2,3,4,5);
+//for servo motor
+int servopin=6;
+//no 1 sensor
+int trigpin=9;
+int echopin=10;
+//no 2sensor
+int twotrig=A0;
+int twoechopin=A1;
+int maxdistance=400; // for object detection
+NewPing car1(trigpin,echopin,maxdistance);
+NewPing car2(twotrig,twoechopin,maxdistance);
+Servo gate;
+
+void setup() {
+  // put your setup code here, to run once:
+  lcd.begin(20,4);
+
+//1 sensor
+  pinMode(trigpin, OUTPUT);
+pinMode(echopin, INPUT);
+// 2 sensor
+pinMode(twotrig, OUTPUT);
+pinMode(twoechopin, INPUT);
+//ethu lcd display pannurathuku 
+lcd.setCursor(0,0);
+lcd.print("slot1:");   //slot 1
+lcd.setCursor(0,1);
+lcd.print("slot2:");       //skot 2
+                       //slot 4
+gate.attach(6);
+gate.write(90);
+
+}
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //ultrasonic sensor
+  int slot1=car1.ping_cm();
+  int slot2=car2.ping_cm();
+
+
+
+
+  
+  
+//this is for lcd slot selection
+{
+
+if(slot1<=100)
+{
+  
+lcd.setCursor(7,0);
+lcd.print("no parking");
+ gate.write(90);
+}
+
+else
+{
+  lcd.setCursor(7,0);
+  lcd.print("EMPTY      ");
+  
+ gate.write(180);
+
+}
+if(slot2<=100)
+{
+  lcd.setCursor(7,1);
+lcd.print("no parking");
+ gate.write(90);
+
+
+}
+else
+{
+  lcd.setCursor(7,1);
+  lcd.print("EMPTY     ");
+   gate.write(180);
+}
+delay(500);
+}
+}
+
+
+
+
+
+
